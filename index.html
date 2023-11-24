@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>BooksAPI</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+  <style>
+    .card {
+      margin-bottom: 20px;
+    }
+    .card-img-top {
+      height: 300px;
+      width: 100%;
+      object-fit: cover;
+    }
+    .card-title {
+      font-size: 1.2rem;
+    }
+    .card-text {
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container mt-5">
+    <h1 class="text-center" style="margin-bottom: 100px; font-size: 60pt;">BooksAPI</h1>
+    <div class="row mt-4">
+      <div class="col-md-8 offset-md-2">
+        <form id="searchForm">
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" id="searchInput" placeholder="Buscar livros..." aria-label="Buscar livros" aria-describedby="button-addon2">
+            <button class="btn btn-primary" type="submit" id="button-addon2">Buscar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="row row-cols-1 row-cols-md-3 g-4" id="bookCards">
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+  <script>
+    document.getElementById('searchForm').addEventListener('submit', function(event) {
+      event.preventDefault(); // Evita o comportamento padrão do formulário
+      
+      const searchTerm = document.getElementById('searchInput').value.trim();
+
+      // Faz uma requisição à API do Google Books
+      fetch(`https://www.googleapis.com/books/v1/volumes?q=${searchTerm}`)
+        .then(response => response.json())
+        .then(data => {
+          const bookCards = document.getElementById('bookCards');
+          bookCards.innerHTML = ''; // Limpa os cards existentes
+
+          if (data.items) {
+            console.log(data.items[0])
+            data.items.forEach(book => {
+              const bookInfo = book.volumeInfo;
+              const card = `
+              <a href="detalhes?id=${book.id}" class="text-decoration-none text-dark">
+                <div class="col">
+                  <div class="card" style="height: 100%; width: 80%;">
+                    <img src="${bookInfo.imageLinks ? bookInfo.imageLinks.smallThumbnail : 'https://via.placeholder.com/150'}" class="card-img-top" alt="Capa do Livro">
+                    <div class="card-body">
+                      <h5 class="card-title">${bookInfo.title}</h5>
+                      <p class="card-text">${bookInfo.description ? bookInfo.description : 'Descrição não disponível'}</p>
+                    </div>
+                  </div>
+                </div>
+            </a>
+              `;
+              bookCards.innerHTML += card; // Adiciona o card na página
+            });
+          } else {
+            bookCards.innerHTML = '<p class="text-center">Nenhum livro encontrado.</p>';
+          }
+        })
+        .catch(error => {
+          console.error('Ocorreu um erro ao buscar os livros:', error);
+        });
+    });
+  </script>
+</body>
+</html>

@@ -11,9 +11,9 @@ const server = http.createServer((req, res) => {
   let filePath = '.' + pathname;
 
   if (filePath === './') {
-    filePath = './index.html'; // Página inicial
+    filePath = './index.html';
   } else if (pathname === '/detalhes' && query.id) {
-    filePath = './detalhes.html'; // Página de detalhes do livro
+    filePath = './detalhes.html';
   }
 
   filePath = path.resolve(filePath);

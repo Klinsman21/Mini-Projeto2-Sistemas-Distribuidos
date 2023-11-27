@@ -12,7 +12,7 @@ const server = http.createServer((req, res) => {
   let filePath = '.' + pathname;
 
   if (filePath === './') {
-    filePath = './login.html';
+    filePath = './index.html';
   } else if (pathname === '/detalhes' && query.id) {
     filePath = './detalhes.html';
   }
@@ -35,7 +35,7 @@ const server = http.createServer((req, res) => {
   });
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3100;
 server.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}/`);
 });

@@ -55,7 +55,8 @@
                 <div class="comment-input">
                     <h4>Deixe seu comentário:</h4>
                     <textarea class="form-control" id="commentText" rows="3"></textarea>
-                    <button class="btn btn-primary mt-2" id="submitComment">Enviar Comentário</button>
+                    <button onclick="sendComment()" class="btn btn-primary mt-2" id="submitComment">Enviar
+                        Comentário</button>
                 </div>
 
                 <!-- Lista de Comentários -->
@@ -73,15 +74,64 @@
         crossorigin="anonymous"></script>
 
     <script>
+        let idBook;
         function obtemID() {
             const queryString = window.location.search;
             const urlParams = new URLSearchParams(queryString);
             return urlParams.get('id');
         }
 
-        console.log('ID do Livro:', obtemID());
+        function sendComment() {
+            data = {
+                autor: "user",
+                comment: document.getElementById("commentText").value
+            };
 
-        // Faz uma requisição à API do Google Books para obter detalhes do livro com base no ID
+            fetch(`http://localhost:3500/comment/${obtemID()}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            }).then(response => {
+                console.log(response)
+                if (response.statusText === "OK") {
+                    const commentsList = document.getElementById('comments');
+                    const commentItem = document.createElement('li');
+                    commentItem.classList.add('comment-item');
+                    commentItem.innerHTML = `
+                    <p>${data.comment}</p>
+                    <p class="text-muted">${data.autor + " " + new Date().toISOString()}</p>
+                    `;
+                    commentsList.appendChild(commentItem);
+
+                }
+                return response.json(); // Converte a resposta para JSON
+            })
+        }
+
+
+        fetch(`http://localhost:3500/comments/${obtemID()}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                const commentsList = document.getElementById('comments');
+                commentsList.innerHTML = ''; // Limpa os comentários existentes
+
+                data.forEach(comment => {
+                    const commentItem = document.createElement('li');
+                    commentItem.classList.add('comment-item');
+                    commentItem.innerHTML = `
+          <p>${JSON.parse(comment).comment}</p>
+          <p class="text-muted">${JSON.parse(comment).autor + " " + JSON.parse(comment).postDate}</p>
+        `;
+                    commentsList.appendChild(commentItem);
+                });
+            })
+            .catch(error => {
+                console.error('Ocorreu um erro ao carregar os detalhes do livro:', error);
+            });
+
         fetch(`http://localhost:3500/details/${obtemID()}`)
             .then(response => response.json())
             .then(data => {
@@ -96,46 +146,6 @@
             });
 
 
-        ///testes
-        const commentsData = [
-            { text: 'Ótimo livro!', date: '2023-11-23' },
-            { text: 'Interessante, recomendo!', date: '2023-11-21' },
-            { text: 'Gostei muito da leitura.', date: '2023-11-18' }
-        ];
-
-        // Função para exibir os comentários existentes
-        function showComments() {
-            const commentsList = document.getElementById('comments');
-            commentsList.innerHTML = ''; // Limpa os comentários existentes
-
-            commentsData.forEach(comment => {
-                const commentItem = document.createElement('li');
-                commentItem.classList.add('comment-item');
-                commentItem.innerHTML = `
-          <p>${comment.text}</p>
-          <p class="text-muted">${comment.date}</p>
-        `;
-                commentsList.appendChild(commentItem);
-            });
-        }
-
-        // Evento ao clicar no botão "Enviar Comentário"
-        document.getElementById('submitComment').addEventListener('click', function () {
-            const commentText = document.getElementById('commentText').value.trim();
-            // Aqui você pode adicionar a lógica para enviar o comentário para um servidor ou armazená-lo localmente
-            if (commentText) {
-                // Simulando adição de um novo comentário
-                const currentDate = new Date().toISOString().slice(0, 10);
-                commentsData.push({ text: commentText, date: currentDate });
-                showComments(); // Atualiza a lista de comentários após adicionar um novo
-                document.getElementById('commentText').value = ''; // Limpa a caixa de texto após enviar o comentário
-            } else {
-                alert('Por favor, escreva seu comentário antes de enviar.');
-            }
-        });
-
-        // Exibe os comentários existentes ao carregar a página
-        showComments();
     </script>
 </body>
 

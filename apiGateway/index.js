@@ -10,7 +10,7 @@ app.use(cors());
 
 // Rota para obter os livros
 app.get('/search/:book', async (req, res) => {
-    const { book } = req.params; 
+  const { book } = req.params;
   try {
     const response = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=${book}`);
     res.json(response.data);
@@ -20,7 +20,7 @@ app.get('/search/:book', async (req, res) => {
 });
 
 app.get('/details/:book', async (req, res) => {
-    const { book } = req.params; 
+  const { book } = req.params;
   try {
     const response = await axios.get(`https://www.googleapis.com/books/v1/volumes/${book}`);
     res.json(response.data);
@@ -30,23 +30,26 @@ app.get('/details/:book', async (req, res) => {
 });
 
 
-// Rota para encaminhar solicitações para o serviço A
-app.post('/serviceA/*', async (req, res) => {
+app.post('/comment/:book', async (req, res) => {
+  const { book } = req.params;
+
   try {
-    const response = await axios.post('http://localhost:3001' + req.url, req.body);
-    res.json(response.data);
+    const response = await axios.post(`http://localhost:3300/comments/${book}`, req.body);
+    console.log(response.data)
+    res.send(response.data);
   } catch (error) {
     res.status(500).json({ error: 'Erro ao acessar o serviço A' });
   }
 });
 
-// Rota para encaminhar solicitações para o serviço B
-app.post('/serviceB/*', async (req, res) => {
+
+app.get('/comments/:book', async (req, res) => {
+  const { book } = req.params;
   try {
-    const response = await axios.post('http://localhost:3002' + req.url, req.body);
+    const response = await axios.get(`http://localhost:3300/comments/${book}`);
     res.json(response.data);
   } catch (error) {
-    res.status(500).json({ error: 'Erro ao acessar o serviço B' });
+    res.status(500).json({ error: 'Erro ao acessar a API externa' });
   }
 });
 

@@ -82,7 +82,7 @@
         console.log('ID do Livro:', obtemID());
 
         // Faz uma requisição à API do Google Books para obter detalhes do livro com base no ID
-        fetch(`https://www.googleapis.com/books/v1/volumes/${obtemID()}`)
+        fetch(`http://localhost:3500/details/${obtemID()}`)
             .then(response => response.json())
             .then(data => {
                 const bookInfo = data.volumeInfo;

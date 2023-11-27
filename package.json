@@ -1,0 +1,26 @@
+{
+  "dependencies": {
+    "axios": "^1.6.2",
+    "fs": "^0.0.1-security",
+    "http": "^0.0.1-security",
+    "path": "^0.12.7",
+    "url": "^0.11.3"
+  },
+  "name": "mini-projeto2-sistemas-distribuidos",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Klinsman21/Mini-Projeto2-Sistemas-Distribuidos.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Klinsman21/Mini-Projeto2-Sistemas-Distribuidos/issues"
+  },
+  "homepage": "https://github.com/Klinsman21/Mini-Projeto2-Sistemas-Distribuidos#readme",
+  "description": ""
+}

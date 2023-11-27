@@ -1,14 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
     <title>Detalhes do Livro</title>
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <style>
-        /* Estilos adicionais para os detalhes do livro */
         .book-details {
             margin-top: 50px;
         }
@@ -106,7 +104,7 @@
                     commentsList.appendChild(commentItem);
 
                 }
-                return response.json(); // Converte a resposta para JSON
+                return response.json();
             })
         }
 
@@ -116,15 +114,15 @@
             .then(data => {
                 console.log(data)
                 const commentsList = document.getElementById('comments');
-                commentsList.innerHTML = ''; // Limpa os comentários existentes
+                commentsList.innerHTML = '';
 
                 data.forEach(comment => {
                     const commentItem = document.createElement('li');
                     commentItem.classList.add('comment-item');
                     commentItem.innerHTML = `
-          <p>${JSON.parse(comment).comment}</p>
-          <p class="text-muted">${JSON.parse(comment).autor + " " + JSON.parse(comment).postDate}</p>
-        `;
+                    <p>${JSON.parse(comment).comment}</p>
+                    <p class="text-muted">${JSON.parse(comment).autor + " " + JSON.parse(comment).postDate}</p>
+                    `;
                     commentsList.appendChild(commentItem);
                 });
             })

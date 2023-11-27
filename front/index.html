@@ -68,7 +68,8 @@
             console.log(data.items[0])
             data.items.forEach(book => {
               const bookInfo = book.volumeInfo;
-              if (bookInfo.description.lenght > 10) {
+              console.log(bookInfo.description);
+              if (bookInfo.description) {
                 const card = `
               <a href="detalhes?id=${book.id}" class="text-decoration-none text-dark">
                 <div class="col">

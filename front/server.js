@@ -12,7 +12,7 @@ const server = http.createServer((req, res) => {
   let filePath = '.' + pathname;
 
   if (filePath === './') {
-    filePath = './index.html';
+    filePath = './login.html';
   } else if (pathname === '/detalhes' && query.id) {
     filePath = './detalhes.html';
   }
